@@ -1,36 +1,23 @@
 import React from 'react'
 import Image from 'next/image'
-import { useNextSanityImage } from 'next-sanity-image'
 import { sanityClient } from '../sanity'
-import { urlFor } from '../utils'
 
+const CategoryCard = ({ name, emoji }) => {
+  return (
+    <div
+      className="mt-5 flex transform cursor-pointer 
+ items-center space-x-3
+ transition duration-200 ease-out hover:scale-105"
+    >
+      <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-gray-200">
+        <h1 className="text-5xl"> {emoji}</h1>
+      </div>
 
-const CategoryCard = ({name, image}) => {
-    const imageProps = useNextSanityImage(sanityClient, image)
-    return (
- <div className="flex items-center m-2 mt-5 space-x-4 
- rounded-xl cursor-pointer  hover:scale-105 
- transition transform duration-200 ease-out">
-           
-       <div className="flex items-center justify-center relative h-16 w-16 border-2 rounded-full border-black">
-           <Image
-           {...imageProps}       
-           width={50}
-           height={50}
-           />
-
-           
-       </div>
-
-        <div>
-            <h2 className='font-extrabold'> {name} </h2>
-
-        </div>
-
- </div>
-
-    )
+      <div>
+        <h2 className="font-bold"> {name} </h2>
+      </div>
+    </div>
+  )
 }
 
-  
 export default CategoryCard

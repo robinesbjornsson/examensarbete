@@ -10,14 +10,12 @@ import {
   UsersIcon,
   ShoppingCartIcon,
 } from '@heroicons/react/solid'
-//import 'react-date-range/dist/styles.css'; // main style file
-//import 'react-date-range/dist/theme/default.css'; // theme css file
-//import { DateRangePicker } from 'react-date-range';
+
 import { useRouter } from 'next/dist/client/router'
 import { useStateValue } from '../redux/StateProvider'
 import reducer, { initialState } from '../redux/reducer'
 function Header() {
-  //const [{ cart }, dispatch] = useStateValue();
+  const [{ quantity }, dispatch] = useStateValue();
 
   useEffect(() => {
     const toggleIcon = document.querySelector('.toggleMenu')
@@ -29,7 +27,7 @@ function Header() {
   const router = useRouter()
 
   return (
-    <header className=" top-0 z-50 grid grid-cols-3 bg-white p-5 md:px-10">
+    <header className=" top-0 z-50 grid grid-cols-3 bg-white p-5 md:px-10 sticky">
       <div
         onClick={() => router.push('/')}
         className="relative my-auto flex h-10 cursor-pointer items-center"
@@ -52,7 +50,7 @@ function Header() {
       {/* Right */}
       <div className="flex items-center justify-end space-x-4 text-gray-500">
         <div className="flex items-center space-x-2 rounded-full p-2">
-          <p className="hidden md:inline ">0</p>
+          <p className="hidden md:inline ">{quantity}</p>
           <div className="toggleMenu">
             <ShoppingCartIcon className="h-6" />
           </div>

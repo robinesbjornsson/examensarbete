@@ -1,5 +1,5 @@
 import Image from 'next/image'
-
+import PizzaImage from '../assets/pizzaImage.jpeg'
 const LargeCard = ({image, title,}) => {
     return (
 
@@ -7,7 +7,7 @@ const LargeCard = ({image, title,}) => {
 <section className="relative py-16 cursor-pointer">
 <div className="relative h-96 min-w-{300px}">
 <Image 
-src="https://links.papareact.com/0fm"
+src={PizzaImage}
 layout="fill"
 objectFit="cover"
 className="rounded-2xl"
@@ -17,7 +17,7 @@ className="rounded-2xl"
 <div className="absolute top-32 left-12 ">
 <h3 className="text-4xl mb-3 w-64">{title}</h3>
 <p>placeholder</p>
-<button className="text-sm text-white bg-gray-900 px-4 py-2 rounded-lg mt-5">placeholder</button>
+<button className="text-sm text-white bg-gray-900 px-4 py-2 rounded-lg mt-5">test</button>
 </div>
 
      </section>

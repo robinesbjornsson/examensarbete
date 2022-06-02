@@ -4,6 +4,7 @@ import { sanityClient } from '../sanity'
 import Restaurant from './restaurant/[slug]'
 import Head from 'next/head'
 import Banner from '../components/Banner'
+
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 
@@ -15,17 +16,17 @@ import { useState, useEffect } from 'react'
 import { useStateValue } from '../redux/StateProvider'
 import { actionType } from '../redux/reducer'
 
-
 interface Restaurant {
   id: number
   name: string
   image: any
+  rating: number
   foodType: string
 }
 interface Category {
   id: number
   name: string
-  image: any
+  emoji: string
 }
 interface HomePageProps {
   restaurants: Restaurant[]
@@ -62,7 +63,7 @@ const Home: NextPage<HomePageProps> = (props) => {
       <Head>
         <title> Food Order App </title>
       </Head>
-      <Header />
+
       <Banner />
 
       <main className="mx-auto max-w-7xl px-8 sm:px-16">
@@ -70,20 +71,20 @@ const Home: NextPage<HomePageProps> = (props) => {
           <h2 className="pb-5 text-4xl font-semibold"> Kategorier </h2>
 
           {/* Pull some data from a server - API endpoints */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="my-10 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-5">
             {props.categories.map((category) => (
               <div key={category.id} onClick={() => setData(category.name)}>
                 <CategoryCard
                   key={category.id}
                   name={category.name}
-                  image={category.image}
+                  emoji={category.emoji}
                 />
               </div>
             ))}
           </div>
         </section>
 
-        <section>
+        <section className="">
           <h2 className="py-8 text-4xl font-semibold">
             {' '}
             Restauranger nära dig{' '}
@@ -97,8 +98,27 @@ const Home: NextPage<HomePageProps> = (props) => {
         </section>
 
         <section className="">
+          <h2 className="py-8 text-4xl font-semibold">
+         
+            Populära Restauranger
+          </h2>
+
+          <div className="flex grid-cols-3 flex-col items-center md:grid md:grid-cols-2 lg:grid">
+            {props.restaurants.map((restaurant) => {
+                if (restaurant.rating > 3)
+                  return (
+                    <RestaurantCard
+                      key={restaurant.id}
+                      restaurant={restaurant}
+                    />
+                  )
+                return 
+              })}
+          </div>
+        </section>
+
+        <section className="">
           <LargeCard
-           
             image="https://links.papareact.com/4cj"
             title="The Greatest Outdoors"
           />

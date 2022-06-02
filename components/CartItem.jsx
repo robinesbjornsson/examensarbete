@@ -1,24 +1,49 @@
 import { AddRounded, RemoveRounded } from '@mui/icons-material'
+import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { actionType } from '../redux/reducer'
 import { useStateValue } from '../redux/StateProvider'
+import { useNextSanityImage } from 'next-sanity-image'
+import { sanityClient } from '../sanity'
+
 let cartItems = []
 const CartItem = ({ name, imgSrc, price, id, itemId }) => {
-  const [qty, setQty] = useState(1)
-  const [{ cart, total }, dispatch] = useStateValue()
+  const [qty, setQty] = useState(0)
+  const [{ cart, total, quantity }, dispatch] = useStateValue()
   const [itemPrice, setItemPrice] = useState(0)
+  const imageProps = useNextSanityImage(sanityClient, imgSrc)
 
   useEffect(() => {
     cartItems = cart
     setItemPrice(parseInt(qty) * parseFloat(price))
-  
-    console.log('total price;' , total)
+
+    if(qty == 0 ) {
+      dispatch({
+        type: actionType.SET_QUANTITY,
+        quantity: 0,
+      })
+    }
   }, [qty])
 
+  useEffect(() =>{
+    if( cart ) {
+      dispatch({
+        type: actionType.SET_QUANTITY,
+        quantity: qty,
+      })
+    }
+
+  },[qty])
+
   const updateQuantity = (action, id) => {
-    console.log('hello', action)
+   
     if (action == 'add') {
+      dispatch({
+        type: actionType.SET_QUANTITY,
+        quantity: qty + 1,
+      })
       setQty(qty + 1)
+  
       console.log(qty)
     } else {
       if (qty == 1) {
@@ -33,33 +58,44 @@ const CartItem = ({ name, imgSrc, price, id, itemId }) => {
   }
 
   return (
-    <div className="mx-2 flex items-center">
-      <div className="min-w-16 h-16 w-16 ">
-        <img src={imgSrc} />
-      </div>
+    <div className="mx-2 my-2 items-center border-b-2 border-b-gray-200">
 
-      <div classItem="ml-10">
-        <h2 className="text-sm">{name} </h2>
-        <div className="flex w-[150px] items-center justify-between">
-          <span>x{qty}</span>
-          <div className="flex w-[60px] cursor-pointer items-center justify-between border-2 border-red-200">
+      <div className='flex flex-col items-center justify-center'>
+      <div className="min-w-14 h-16 w-14 ">
+      <Image {...imageProps} />
+      </div>
+     
+        <h2 className="text-sm">{name} <span>x{quantity}</span> </h2>
+        </div>
+
+        <div className="flex w-full m-2 items-center justify-between">
+         
+
+
+          <div className="flex w-[60px] cursor-pointer items-center justify-between">
             <RemoveRounded
-              className="border-red-500 text-lg"
+              className="" 
               onClick={() => updateQuantity('remove', itemId)}
             />
-
             <AddRounded
-              className="border-2 border-green-500"
               onClick={() => updateQuantity('add', itemId)}
             />
           </div>
+
+
+      <div className='border-red-500'>
+      <p className="itemPrice ">
+        <span className="text-sm"> $ </span>
+        <span className="text-sm"> {itemPrice} </span>
+      </p>
+     
+
+
         </div>
       </div>
 
-      <p className="itemPrice">
-        <span className="text-orange text-sm"> $ </span>
-        <span className="text-sm"> {itemPrice} </span>
-      </p>
+    
+     
     </div>
   )
 }

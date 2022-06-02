@@ -1,8 +1,13 @@
 export const initialState = {
-  cart: null,
+  cart: {
+    products: [],
+    quantity: 0,
+    total: 0,
+  },
   restaurants: null,
   total: null,
   isOpen: false,
+  
 };
 
 export const actionType = {
@@ -10,11 +15,12 @@ export const actionType = {
   SET_RESTAURANTS: "SET_RESTAURANTS",
   SET_TOTAL: "SET_TOTAL",
   SET_OPEN: "SET_OPEN",
+  SET_QUANTITY: "SET_QUANTITY",
 };
 
 const reducer = (state, action) => {
 
-
+console.log(action)
   switch (action.type) {
     case actionType.SET_RESTAURANTS:
       return {
@@ -27,6 +33,13 @@ const reducer = (state, action) => {
         ...state,
         total: action.total,
       };
+
+      case actionType.SET_QUANTITY:
+      return {
+        ...state,
+        quantity: action.quantity,
+      };
+
       case actionType.SET_CART:
         return {
           ...state,

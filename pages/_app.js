@@ -8,7 +8,7 @@ const MyApp = ({ Component, pageProps }) => {
   return (
     <>
       <StateProvider initialState={initialState} reducer={reducer}>
-        <Header />
+      <Header />
         <Component {...pageProps} />
         <Footer />
       </StateProvider>

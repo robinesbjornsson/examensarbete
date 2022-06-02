@@ -8,19 +8,21 @@ import Map from '../../components/Map'
 import { useStateValue } from '../../redux/StateProvider'
 import CartItem from '../../components/cartItem'
 import { actionType } from '../../redux/reducer'
-
-
+import { useRouter } from 'next/router'
+import Link from 'next/link'
 const Restaurant = (restaurant) => {
   const dishes = restaurant.dishes
   const imageProps = useNextSanityImage(sanityClient, restaurant.image)
   const [{ cart, total }, dispatch] = useStateValue()
   const [totalPrice, setTotalPrice] = useState(0)
-  
+
   console.log(cart)
 
+ 
+
   const getTotal = () => {
-  //  return (dish.price * quantity).toFixed(2);
-  };
+    //  return (dish.price * quantity).toFixed(2);
+  }
 
   return (
     <div>
@@ -44,16 +46,16 @@ const Restaurant = (restaurant) => {
             <DishItem key={dish.id} dish={dish} />
           ))}
         </div>
-       
-          {!cart || cart.length == 0 ? (
-            <div></div>
-          ) : ( <div className={` ${styles.rightMenu} `}>
-            <div className="cartCheckOutContainer">
+
+        {!cart || cart.length == 0 ? (
+          <div></div>
+        ) : (
+          <div className={` ${styles.rightMenu} `}>
+            <div className="cartCheckOutContainer flex  h-full flex-col">
               <div className="mt-2 w-full min-w-[320px] flex-1 py-10  ">
                 {cart &&
                   cart.map((data) => (
                     <CartItem
-                      
                       key={data.id}
                       itemId={data.id}
                       name={data.name}
@@ -63,21 +65,28 @@ const Restaurant = (restaurant) => {
                   ))}
               </div>
 
-              <div className="m-15 flex w-full items-center justify-between px-5 py-8">
-                <h3> Total </h3>
-                <p>
-                  <span>  {getTotal()} </span>
-                </p>
+              <div className=" bottom-0 mb-20 p-2">
+                <div className=" m-15 flex w-full items-center justify-between px-5 py-8">
+                  <h3> Total </h3>
+                  <p>
+                    <span> {getTotal()} </span>
+                  </p>
+                </div>
+
+                <Link href={`/orders/124`}>
+                  <button
+                    className="w-full 
+      bg-black px-10 py-5 text-lg font-semibold tracking-wider text-gray-100 outline-none"
+                  >
+                    Checkout
+                  </button>
+                </Link>
+
+
+
               </div>
-              <button
-                className="w-full 
-           bg-black px-10 py-5 text-lg font-semibold tracking-wider text-gray-100 outline-none"
-              >
-                Checkout
-              </button>
             </div>
-         
-        </div>
+          </div>
         )}
         <h2> Location </h2>
       </div>
@@ -89,10 +98,9 @@ const cartData = []
 
 export const DishItem = ({ dish }) => {
   const [isCart, setCart] = useState(null)
-  const [{cart, total}, dispatch] = useStateValue()
+  const [{ cart, total }, dispatch] = useStateValue()
   const [itemPrice, setItemPrice] = useState(0)
 
-  
   function addToCart(dish) {
     //console.log('add to cart', dish)
     setCart(dish)
