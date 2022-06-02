@@ -1,11 +1,11 @@
 import React from 'react'
 import Image from 'next/image'
-
+import BannerImage from '../assets/bannerImage2.jpeg'
 const Banner = () => {
     return (
         <div className="relative h-[200px] sm:h-[200px] lg:h-[300px] xl:h-[300px] 2xl:h-[300px]">
            <Image
-           src=""
+           src={BannerImage}
            layout="fill"
            objectFit="cover"
            />

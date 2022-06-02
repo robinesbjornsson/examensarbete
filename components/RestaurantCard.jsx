@@ -7,9 +7,9 @@ import { useRouter } from 'next/router'
 import { urlFor } from '../utils'
 
 const RestaurantCard = ({ restaurant }) => {
-    const imageProps = useNextSanityImage(sanityClient, restaurant.image)
+  const imageProps = useNextSanityImage(sanityClient, restaurant.image)
 
-    const router = useRouter()
+  const router = useRouter()
 
   const handleClick = () => {
     router.push(`./restaurant/${restaurant.slug.current}`)
@@ -18,9 +18,9 @@ const RestaurantCard = ({ restaurant }) => {
   // rating maxDeliveryTime, minDeliveryTime,
   //
   return (
-    <div className=" w-full p-3 cursor-pointer" onClick={handleClick}>
+    <div className=" w-full cursor-pointer p-3" onClick={handleClick}>
       <div className="bg-gray-100">
-      <div className="relative h-[100px] sm:h-[200px] lg:h-[200px] xl:h-[200px] 2xl:h-[200px]">
+        <div className="relative h-[100px] sm:h-[200px] lg:h-[200px] xl:h-[200px] 2xl:h-[200px]">
           <Img {...imageProps} layout="fill" objectFit="cover" />
         </div>
 
@@ -39,10 +39,6 @@ const RestaurantCard = ({ restaurant }) => {
             <p>{restaurant.rating}</p>
           </div>
         </div>
-
-
-        
-
       </div>
     </div>
   )

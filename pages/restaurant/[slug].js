@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from 'react'
 import Img from 'next/image'
+import styles from '../../styles.module.css'
 import { sanityClient } from '../../sanity'
 import { urlFor } from '../../utils'
 import { useNextSanityImage } from 'next-sanity-image'
 import Map from '../../components/Map'
-import { useStateValue } from '../../components/StateProvider'
+import { useStateValue } from '../../redux/StateProvider'
+import CartItem from '../../components/cartItem'
+import { actionType } from '../../redux/reducer'
+
+
 const Restaurant = (restaurant) => {
-  
-  const [quantity, setQuantity] = useState(0)
   const dishes = restaurant.dishes
   const imageProps = useNextSanityImage(sanityClient, restaurant.image)
+  const [{ cart, total }, dispatch] = useStateValue()
+  const [totalPrice, setTotalPrice] = useState(0)
+  
+  console.log(cart)
 
   const getTotal = () => {
-    return (dish.price * quantity).toFixed(2)
-  }
+  //  return (dish.price * quantity).toFixed(2);
+  };
 
   return (
     <div>
@@ -33,22 +40,79 @@ const Restaurant = (restaurant) => {
         <p className="mt-20 text-lg "> Menu</p>
 
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {dishes.map(({ price, name, image, id }) => (
-            <DishItem name={name} image={image} id={id} price={price} />
+          {dishes.map((dish) => (
+            <DishItem key={dish.id} dish={dish} />
           ))}
         </div>
+       
+          {!cart || cart.length == 0 ? (
+            <div></div>
+          ) : ( <div className={` ${styles.rightMenu} `}>
+            <div className="cartCheckOutContainer">
+              <div className="mt-2 w-full min-w-[320px] flex-1 py-10  ">
+                {cart &&
+                  cart.map((data) => (
+                    <CartItem
+                      
+                      key={data.id}
+                      itemId={data.id}
+                      name={data.name}
+                      imgSrc={data.image}
+                      price={data.price}
+                    />
+                  ))}
+              </div>
 
+              <div className="m-15 flex w-full items-center justify-between px-5 py-8">
+                <h3> Total </h3>
+                <p>
+                  <span>  {getTotal()} </span>
+                </p>
+              </div>
+              <button
+                className="w-full 
+           bg-black px-10 py-5 text-lg font-semibold tracking-wider text-gray-100 outline-none"
+              >
+                Checkout
+              </button>
+            </div>
+         
+        </div>
+        )}
         <h2> Location </h2>
       </div>
     </div>
   )
 }
 
-export const DishItem = ({ price, name, id, image }) => {
+const cartData = []
 
+export const DishItem = ({ dish }) => {
   const [isCart, setCart] = useState(null)
+  const [{cart, total}, dispatch] = useStateValue()
+  const [itemPrice, setItemPrice] = useState(0)
 
-  const imageProps = useNextSanityImage(sanityClient, image)
+  
+  function addToCart(dish) {
+    //console.log('add to cart', dish)
+    setCart(dish)
+  }
+
+  useEffect(() => {
+    if (isCart) {
+      cartData.push(isCart)
+      dispatch({
+        type: actionType.SET_CART,
+        cart: cartData,
+      })
+      dispatch({
+        type: actionType.TOTAL,
+        total: itemPrice,
+      })
+      // console.log('use effect', isCart, 'cart data' , cartData)
+    }
+  }, [isCart])
+  const imageProps = useNextSanityImage(sanityClient, dish.image)
 
   return (
     <div className="flex flex-col p-3">
@@ -61,7 +125,7 @@ export const DishItem = ({ price, name, id, image }) => {
         />
         <div className="absolute top-2 h-10 w-10">
           <button
-            onClick={() => setCart(dishes.find((dish) => dish.id == id))}
+            onClick={() => addToCart(dish)}
             className="mx-auto my-auto h-full  w-full rounded-full bg-white text-2xl shadow-md"
           >
             +
@@ -71,8 +135,8 @@ export const DishItem = ({ price, name, id, image }) => {
 
       <div className="">
         <div className="">
-          <h1 className="text-lg font-bold"> {name}</h1>
-          <h2 className="font-light text-gray-700"> {price} kr</h2>
+          <h1 className="text-lg font-bold"> {dish.name}</h1>
+          <h2 className="font-light text-gray-700"> {dish.price} kr</h2>
         </div>
       </div>
     </div>

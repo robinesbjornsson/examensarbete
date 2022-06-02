@@ -14,8 +14,8 @@ import {
 //import 'react-date-range/dist/theme/default.css'; // theme css file
 //import { DateRangePicker } from 'react-date-range';
 import { useRouter } from 'next/dist/client/router'
-import { useStateValue } from './StateProvider'
-import reducer, { initialState } from '../Components/reducer'
+import { useStateValue } from '../redux/StateProvider'
+import reducer, { initialState } from '../redux/reducer'
 function Header() {
   //const [{ cart }, dispatch] = useStateValue();
 
