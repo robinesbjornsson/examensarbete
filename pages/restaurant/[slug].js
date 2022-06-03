@@ -7,25 +7,20 @@ import { useNextSanityImage } from 'next-sanity-image'
 import Map from '../../components/Map'
 import { useStateValue } from '../../redux/StateProvider'
 import CartItem from '../../components/cartItem'
+import Header from '../../components/Header'
 import { actionType } from '../../redux/reducer'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+const cartData = []
+
 const Restaurant = (restaurant) => {
   const dishes = restaurant.dishes
   const imageProps = useNextSanityImage(sanityClient, restaurant.image)
-  const [{ cart, total }, dispatch] = useStateValue()
-  const [totalPrice, setTotalPrice] = useState(0)
-
-  console.log(cart)
-
- 
-
-  const getTotal = () => {
-    //  return (dish.price * quantity).toFixed(2);
-  }
+  const [{ cart, isOpen }, dispatch] = useStateValue()
 
   return (
     <div>
+      <Header itemsInCart={cartData.length} />
       <div className="w-full">
         <div className="relative h-[100px] sm:h-[200px] lg:h-[200px] xl:h-[200px] 2xl:h-[200px]">
           <Img {...imageProps} layout="fill" objectFit="cover" />
@@ -47,10 +42,21 @@ const Restaurant = (restaurant) => {
           ))}
         </div>
 
-        {!cart || cart.length == 0 ? (
+        {isOpen || cart.length == 0 ? (
           <div></div>
         ) : (
           <div className={` ${styles.rightMenu} `}>
+            <button
+              onClick={() =>
+                dispatch({
+                  type: actionType.SET_OPEN,
+                  open: !isOpen,
+                })
+              }
+            >
+              {' '}
+              X
+            </button>
             <div className="cartCheckOutContainer flex  h-full flex-col">
               <div className="mt-2 w-full min-w-[320px] flex-1 py-10  ">
                 {cart &&
@@ -69,7 +75,7 @@ const Restaurant = (restaurant) => {
                 <div className=" m-15 flex w-full items-center justify-between px-5 py-8">
                   <h3> Total </h3>
                   <p>
-                    <span> {getTotal()} </span>
+                    <span> </span>
                   </p>
                 </div>
 
@@ -81,29 +87,34 @@ const Restaurant = (restaurant) => {
                     Checkout
                   </button>
                 </Link>
-
-
-
               </div>
             </div>
           </div>
         )}
         <h2> Location </h2>
+
+        <div>
+
+
+          <Map location={restaurant.location} />
+        </div>
       </div>
     </div>
   )
 }
 
-const cartData = []
-
 export const DishItem = ({ dish }) => {
   const [isCart, setCart] = useState(null)
-  const [{ cart, total }, dispatch] = useStateValue()
+  const [{ cart, isOpen }, dispatch] = useStateValue()
   const [itemPrice, setItemPrice] = useState(0)
 
+  //adds dish to isCart
   function addToCart(dish) {
-    //console.log('add to cart', dish)
     setCart(dish)
+    dispatch({
+      type: actionType.SET_OPEN,
+      open: !isOpen,
+    })
   }
 
   useEffect(() => {
@@ -113,13 +124,9 @@ export const DishItem = ({ dish }) => {
         type: actionType.SET_CART,
         cart: cartData,
       })
-      dispatch({
-        type: actionType.TOTAL,
-        total: itemPrice,
-      })
-      // console.log('use effect', isCart, 'cart data' , cartData)
     }
   }, [isCart])
+
   const imageProps = useNextSanityImage(sanityClient, dish.image)
 
   return (

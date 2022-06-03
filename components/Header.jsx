@@ -13,16 +13,20 @@ import {
 
 import { useRouter } from 'next/dist/client/router'
 import { useStateValue } from '../redux/StateProvider'
-import reducer, { initialState } from '../redux/reducer'
-function Header() {
-  const [{ quantity }, dispatch] = useStateValue();
 
-  useEffect(() => {
-    const toggleIcon = document.querySelector('.toggleMenu')
-    toggleIcon.addEventListener('click', () => {
-      document.querySelector('.rightMenu').classList.toggle('active')
-    })
-  }, [])
+
+
+function Header() {
+  const [{ cart }, dispatch] = useStateValue();
+
+
+
+  // useEffect(() => {
+  //   const toggleIcon = document.querySelector('.toggleMenu')
+  //   toggleIcon.addEventListener('click', () => {
+  //     document.querySelector('.rightMenu').classList.toggle('active')
+  //   })
+  // }, [])
 
   const router = useRouter()
 
@@ -34,7 +38,7 @@ function Header() {
       >
         {/* left */}
         <div>
-         <h2> FooDelivery </h2>
+         <h2 className='sm:text-sm text-xl font-bold'> Food Delivery App </h2>
         </div>
       </div>
       {/* Middle - Search */}
@@ -50,7 +54,7 @@ function Header() {
       {/* Right */}
       <div className="flex items-center justify-end space-x-4 text-gray-500">
         <div className="flex items-center space-x-2 rounded-full p-2">
-          <p className="hidden md:inline ">{quantity}</p>
+          <p className="hidden md:inline ">{cart ? cart.length : ""}</p>
           <div className="toggleMenu">
             <ShoppingCartIcon className="h-6" />
           </div>

@@ -64,6 +64,8 @@ const Home: NextPage<HomePageProps> = (props) => {
         <title> Food Order App </title>
       </Head>
 
+      <Header />
+
       <Banner />
 
       <main className="mx-auto max-w-7xl px-8 sm:px-16">
@@ -86,8 +88,8 @@ const Home: NextPage<HomePageProps> = (props) => {
 
         <section className="">
           <h2 className="py-8 text-4xl font-semibold">
-            {' '}
-            Restauranger nära dig{' '}
+            
+            Upptäck Restauranger
           </h2>
           <div className="flex grid-cols-3 flex-col items-center md:grid md:grid-cols-2 lg:grid">
             {isMainData &&
@@ -114,6 +116,19 @@ const Home: NextPage<HomePageProps> = (props) => {
                   )
                 return 
               })}
+          </div>
+        </section>
+
+        <section className="">
+          <h2 className="py-8 text-4xl font-semibold">
+            
+            Restauranger nära dig
+          </h2>
+          <div className="flex grid-cols-3 flex-col items-center md:grid md:grid-cols-2 lg:grid">
+            {isMainData &&
+              isMainData.map((restaurant) => (
+                <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+              ))}
           </div>
         </section>
 

@@ -1,9 +1,5 @@
 export const initialState = {
-  cart: {
-    products: [],
-    quantity: 0,
-    total: 0,
-  },
+  cart: [],
   restaurants: null,
   total: null,
   isOpen: false,
