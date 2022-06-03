@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react'
 import Img from 'next/image'
 import styles from '../../styles.module.css'
 import { sanityClient } from '../../sanity'
-import { urlFor } from '../../utils'
 import { useNextSanityImage } from 'next-sanity-image'
 import Map from '../../components/Map'
 import { useStateValue } from '../../redux/StateProvider'
-import CartItem from '../../components/cartItem'
 import Header from '../../components/Header'
+import CartItem from '../../components/CartItem'
 import { actionType } from '../../redux/reducer'
-import { useRouter } from 'next/router'
 import Link from 'next/link'
 const cartData = []
 
@@ -46,17 +44,7 @@ const Restaurant = (restaurant) => {
           <div></div>
         ) : (
           <div className={` ${styles.rightMenu} `}>
-            <button
-              onClick={() =>
-                dispatch({
-                  type: actionType.SET_OPEN,
-                  open: !isOpen,
-                })
-              }
-            >
-              {' '}
-              X
-            </button>
+    
             <div className="cartCheckOutContainer flex  h-full flex-col">
               <div className="mt-2 w-full min-w-[320px] flex-1 py-10  ">
                 {cart &&
@@ -108,7 +96,6 @@ export const DishItem = ({ dish }) => {
   const [{ cart, isOpen }, dispatch] = useStateValue()
   const [itemPrice, setItemPrice] = useState(0)
 
-  //adds dish to isCart
   function addToCart(dish) {
     setCart(dish)
     dispatch({
